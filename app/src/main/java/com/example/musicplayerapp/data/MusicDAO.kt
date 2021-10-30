@@ -24,7 +24,4 @@ interface MusicDAO {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(music: MusicEntity)
-
-    @Query("DELETE FROM musiclist")
-    suspend fun deleteAll()
 }

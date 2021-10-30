@@ -12,4 +12,12 @@ import androidx.room.PrimaryKey
  * @ColumnInfo(name = "id")  : 만약 멤버변수와 이름을 다르게 하고 싶으면 이 어노테이션으로 지정한다.
  */
 @Entity(tableName = "musiclist")
-data class MusicEntity(@PrimaryKey @ColumnInfo(name = "id") val id : String)
+data class MusicEntity(
+    @PrimaryKey @ColumnInfo(name = "id") val id: String,
+    @ColumnInfo(name = "singer") var singer: String,
+    @ColumnInfo(name = "album") var album: String,
+    @ColumnInfo(name = "title") var title: String,
+    @ColumnInfo(name = "image") var image: String,
+    @ColumnInfo(name = "file") var file: String,
+    @ColumnInfo(name = "lyrics") var lyrics: String
+)

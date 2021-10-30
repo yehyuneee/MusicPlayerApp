@@ -17,13 +17,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>({ ActivitySplashBindi
         Glide.with(this).load(R.drawable.flo_splash).into(mViewBiding.splashImage)
 
         Timer().schedule(2000) {
-            startMainActivity<MainMusicActivity>()
             finish()
         }
     }
-}
-
-inline fun <reified T : Activity> Context.startMainActivity() {
-    val intent = Intent(this, T::class.java)
-    startActivity(intent)
 }

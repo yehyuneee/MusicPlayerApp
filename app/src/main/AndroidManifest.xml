@@ -3,6 +3,9 @@
     package="com.example.musicplayerapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <application
         android:allowBackup="true"
@@ -10,27 +13,31 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MusicPlayerApp">
+        android:theme="@style/Theme.MusicPlayerApp"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".BaseActivity"
             android:exported="true" />
         <activity
             android:name=".LyricsActivity"
+            android:launchMode="singleTask"
             android:exported="true" />
         <activity
             android:name=".SplashActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:theme="@style/SplashTheme">
+        </activity>
+        <activity
+            android:name=".MainMusicActivity"
+            android:launchMode="singleTask"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainMusicActivity"
-            android:exported="true" />
     </application>
 
 </manifest>

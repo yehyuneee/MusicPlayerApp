@@ -32,10 +32,6 @@ class MainMusicActivity : BaseActivity<ActivityMainBinding>({ ActivityMainBindin
     lateinit var mMusicPlayer: MediaPlayer
 
     lateinit var mMusicFile: Uri
-    lateinit var mMusicThread: Thread
-
-    lateinit var mPlayDrawable: Drawable
-    lateinit var mPauseDrawable: Drawable
 
     var mProgressDuration: Int = 0
 
@@ -47,6 +43,7 @@ class MainMusicActivity : BaseActivity<ActivityMainBinding>({ ActivityMainBindin
 
         mContext = this;
 
+        // 음악 정보 API 통신
         RequestMusicData(object : ResponseResultListener<MusicEntity> {
             override fun onSuccess(result: MusicEntity) {
                 result.let {
@@ -81,8 +78,13 @@ class MainMusicActivity : BaseActivity<ActivityMainBinding>({ ActivityMainBindin
                 mMusicPlayer.seekTo(mProgressDuration)
             }
         })
+
+        mViewBiding.musicPlayPauseBtn.setOnClickListener(this)
     }
 
+    /**
+     * 데이터 세팅
+     */
     fun setData() {
         mMusicData.title.let {
             mViewBiding.musicTitle.text = it
@@ -101,54 +103,62 @@ class MainMusicActivity : BaseActivity<ActivityMainBinding>({ ActivityMainBindin
             mMusicPlayer = MediaPlayer.create(mContext, mMusicFile)
             mViewBiding.musicSeekbar.max = mMusicPlayer.duration
 
-            mPlayDrawable = ContextCompat.getDrawable(mContext, R.drawable.play_icon)!!
-            mPauseDrawable = ContextCompat.getDrawable(mContext, R.drawable.pause_icon)!!
+            mMusicPlayer.setOnCompletionListener(object : MediaPlayer.OnCompletionListener{
+                override fun onCompletion(p0: MediaPlayer?) {
+                    mMusicPlayer.apply {
+                        stop()
+                        prepare()
+                        seekTo(0)
+                    }
+                    mViewBiding.musicPlayPauseBtn.isSelected = false
+                }
+            })
         }
-
-        mViewBiding.musicPlayPauseBtn.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
             mViewBiding.musicPlayPauseBtn.id -> {
                 if (mViewBiding.musicPlayPauseBtn.isSelected) {
-                    mMusicPlayer.let {
-                        mMusicPlayer.stop()
-                        mMusicPlayer.prepare()
-                        Log.d("테스트", "3 : " + mProgressDuration)
-                        mMusicPlayer.seekTo(mProgressDuration)
+                    mMusicPlayer.apply {
+                        stop()
+                        prepare()
+                        seekTo(mProgressDuration)
                     }
                     mViewBiding.musicPlayPauseBtn.isSelected = false
                 } else {
-                    mMusicPlayer.start()
-                    MusicThread().start()
+                    mMusicPlayer.let {
+                        mMusicPlayer.start()
+                        MusicThread().start()
 
-                    mViewBiding.musicPlayPauseBtn.isSelected = true
+                        mViewBiding.musicPlayPauseBtn.isSelected = true
+                    }
                 }
             }
         }
     }
 
+    /**
+     * 음악 재생에 따른 SeekBar 설정
+     */
     inner class MusicThread() : Thread() {
         override fun run() {
             while (mMusicPlayer.isPlaying()) {  // 음악이 실행중일때 계속 돌아가게 함
-                Log.d("테스트", "1")
                 try {
-                    Log.d("테스트", "2")
-                    Thread.sleep(1000) // 1초마다 시크바 움직이게 함
+                    sleep(1000) // 1초마다 SeekBar 움직이게 함
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-                // 현재 재생중인 위치를 가져와 시크바에 적용
+                // 현재 재생중인 위치를 가져와 SeekBar에 적용
                 mViewBiding.musicSeekbar.setProgress(mMusicPlayer.getCurrentPosition())
             }
         }
     }
-
-    //// seekbar 안움직임 , duration 수정필요
 }
 
-
+/**
+ * 인트로 화면 이동
+ */
 inline fun <reified T : Activity> Context.startSplashActivity() {
     val intent = Intent(this, T::class.java)
     startActivity(intent)

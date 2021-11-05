@@ -65,6 +65,7 @@ class MainMusicActivity : BaseActivity<ActivityMainBinding>({ ActivityMainBindin
                 fromUser: Boolean,
             ) {
                 mProgressDuration = progress
+                Log.d("onProgressChanged : " , mMusicPlayer.currentPosition.toString())
                 if (fromUser) {
                     mMusicPlayer.seekTo(progress)
                 }

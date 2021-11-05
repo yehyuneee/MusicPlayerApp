@@ -76,8 +76,8 @@
         style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:max="100"
         android:layout_marginTop="50dp"
+        android:max="100"
         android:progressDrawable="@drawable/seekbar"
         android:thumb="@drawable/seek_thumb_origin"
         app:layout_constraintEnd_toEndOf="parent"
@@ -89,7 +89,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginTop="30dp"
-        android:src="@drawable/play_icon"
+        android:src="@drawable/play_pause_selector"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/music_seekbar" />

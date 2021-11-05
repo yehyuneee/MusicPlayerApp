@@ -3,9 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/drawable/seek_thumb.xml" value="0.12239583333333333" />
-        <entry key="app/src/main/res/drawable/seek_thumb_origin.xml" value="0.12239583333333333" />
-        <entry key="app/src/main/res/drawable/seekbar.xml" value="0.12239583333333333" />
+        <entry key="..\:/Users/yhkim/AndroidStudioProjects/MusicPlayerApp/app/src/main/res/drawable/play_pause_selector.xml" value="0.14947916666666666" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.21822916666666667" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.21822916666666667" />
       </map>

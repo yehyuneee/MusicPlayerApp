@@ -3,26 +3,23 @@ package com.example.musicplayerapp
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.media.MediaPlayer
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.SystemClock.sleep
 import android.util.Log
 import android.view.View
 import android.widget.SeekBar
 import android.widget.Toast
-import androidx.core.content.ContextCompat
+import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
+import com.example.musicplayerapp.data.LyricsEntity
 import com.example.musicplayerapp.data.MusicEntity
 import com.example.musicplayerapp.data.RequestMusicData
 import com.example.musicplayerapp.databinding.ActivityMainBinding
-import com.example.musicplayerapp.databinding.ActivitySplashBinding
 import com.example.musicplayerapp.listener.ResponseResultListener
 import java.lang.Exception
-import java.lang.Thread.sleep
+import java.util.regex.Pattern
 
 class MainMusicActivity : BaseActivity<ActivityMainBinding>({ ActivityMainBinding.inflate(it) }),
     View.OnClickListener {
@@ -32,6 +29,9 @@ class MainMusicActivity : BaseActivity<ActivityMainBinding>({ ActivityMainBindin
     lateinit var mMusicPlayer: MediaPlayer
 
     lateinit var mMusicFile: Uri
+
+    var mTotalTime: Long = 0;
+    var mCurrentTime: Long = 0;
 
     var mProgressDuration: Int = 0
 
@@ -65,7 +65,7 @@ class MainMusicActivity : BaseActivity<ActivityMainBinding>({ ActivityMainBindin
                 fromUser: Boolean,
             ) {
                 mProgressDuration = progress
-                Log.d("onProgressChanged : " , mMusicPlayer.currentPosition.toString())
+                Log.d("onProgressChanged : ", mMusicPlayer.currentPosition.toString())
                 if (fromUser) {
                     mMusicPlayer.seekTo(progress)
                 }
@@ -103,8 +103,11 @@ class MainMusicActivity : BaseActivity<ActivityMainBinding>({ ActivityMainBindin
             mMusicFile = Uri.parse(it)
             mMusicPlayer = MediaPlayer.create(mContext, mMusicFile)
             mViewBiding.musicSeekbar.max = mMusicPlayer.duration
+            mTotalTime = mMusicPlayer.duration.toLong()
+            mViewBiding.musicTotalTime.text = milliSecondsToTimer(mTotalTime)
+            mViewBiding.musicTotalTime.isVisible = true
 
-            mMusicPlayer.setOnCompletionListener(object : MediaPlayer.OnCompletionListener{
+            mMusicPlayer.setOnCompletionListener(object : MediaPlayer.OnCompletionListener {
                 override fun onCompletion(p0: MediaPlayer?) {
                     mMusicPlayer.apply {
                         stop()
@@ -114,6 +117,23 @@ class MainMusicActivity : BaseActivity<ActivityMainBinding>({ ActivityMainBindin
                     mViewBiding.musicPlayPauseBtn.isSelected = false
                 }
             })
+        }
+
+        mMusicData.lyrics.let {
+            var duration: String? = null
+            var lyrics: String? = null
+
+            val lycisList = it.split("\n")
+            for (i in lycisList.indices) {
+                val pattern = Pattern.compile("\\[(.*?)\\]")
+                val matcher = pattern.matcher(lycisList.get(i))
+                while (matcher.find()) {
+                    duration = matcher.group(1)
+                }
+                var lyricsEntity: LyricsEntity = LyricsEntity(1, duration, lyrics)
+                // TODO test primary key인 id값 확인해야함!!!!
+
+            }
         }
     }
 
@@ -151,10 +171,44 @@ class MainMusicActivity : BaseActivity<ActivityMainBinding>({ ActivityMainBindin
                     e.printStackTrace()
                 }
                 // 현재 재생중인 위치를 가져와 SeekBar에 적용
-                mViewBiding.musicSeekbar.setProgress(mMusicPlayer.getCurrentPosition())
+                runOnUiThread {
+                    mCurrentTime = mMusicPlayer.currentPosition.toLong()
+                    mViewBiding.musicLeftTime.text = milliSecondsToTimer(mCurrentTime)
+
+                    mViewBiding.musicSeekbar.setProgress(mMusicPlayer.getCurrentPosition())
+                }
             }
         }
     }
+}
+
+/**
+ * 시간 계산
+ */
+fun milliSecondsToTimer(milliseconds: Long): String? {
+    var finalTimerString = ""
+    var secondsString = ""
+
+    // Convert total duration into time
+    val hours = (milliseconds / (1000 * 60 * 60)).toInt()
+    val minutes = (milliseconds % (1000 * 60 * 60)).toInt() / (1000 * 60)
+    val seconds = (milliseconds % (1000 * 60 * 60) % (1000 * 60) / 1000).toInt()
+
+    // Add hours if there
+    if (hours > 0) {
+        finalTimerString = "$hours:"
+    }
+
+    // Prepending 0 to seconds if it is one digit
+    secondsString = if (seconds < 10) {
+        "0$seconds"
+    } else {
+        "" + seconds
+    }
+    finalTimerString = "$finalTimerString$minutes:$secondsString"
+
+    // return timer string
+    return finalTimerString
 }
 
 /**

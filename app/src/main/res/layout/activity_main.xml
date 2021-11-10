@@ -84,6 +84,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/music_info_layout" />
 
+    <RelativeLayout
+        android:id="@+id/music_time_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/music_seekbar">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/music_left_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@string/init_curruent_time"
+            android:textColor="@color/white" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/music_total_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/white"
+            android:visibility="gone" />
+    </RelativeLayout>
+
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/music_play_pause_btn"
         android:layout_width="30dp"
@@ -92,6 +120,6 @@
         android:src="@drawable/play_pause_selector"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/music_seekbar" />
+        app:layout_constraintTop_toBottomOf="@+id/music_time_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

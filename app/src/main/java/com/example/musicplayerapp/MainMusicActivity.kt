@@ -148,7 +148,7 @@ class MainMusicActivity : BaseActivity<ActivityMainBindingImpl, MusicViewModel>(
     override fun onClick(v: View?) {
         when (v?.id) {
             binding.musicPlayPauseBtn.id -> {
-                if (musicPlayPauseBtn.isSelected) {
+                if (binding.musicPlayPauseBtn.isSelected) {
                     mMusicPlayer.apply {
                         stop()
                         prepare()

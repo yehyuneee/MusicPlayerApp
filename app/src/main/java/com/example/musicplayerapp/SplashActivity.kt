@@ -22,7 +22,7 @@ class SplashActivity : BaseActivity<ActivitySplashBindingImpl, ViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Glide.with(this).load(R.drawable.flo_splash).into(splashImage)
+        Glide.with(this).load(R.drawable.flo_splash).into(binding.splashImage)
 
         Timer().schedule(2000) {
             finish()

@@ -12,17 +12,25 @@ import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModel
 import com.bumptech.glide.Glide
 import com.example.musicplayerapp.data.LyricsEntity
 import com.example.musicplayerapp.data.MusicEntity
 import com.example.musicplayerapp.data.RequestMusicData
 import com.example.musicplayerapp.databinding.ActivityMainBinding
+import com.example.musicplayerapp.databinding.ActivityMainBindingImpl
 import com.example.musicplayerapp.listener.ResponseResultListener
+import com.example.musicplayerapp.viewmodel.MusicViewModel
 import java.lang.Exception
 import java.util.regex.Pattern
 
-class MainMusicActivity : BaseActivity<ActivityMainBinding>({ ActivityMainBinding.inflate(it) }),
+class MainMusicActivity : BaseActivity<ActivityMainBindingImpl, MusicViewModel>(),
     View.OnClickListener {
+    override val layoutId = R.layout.activity_main
+    override val viewModel: MusicViewModel
+        get() = TODO("Not yet implemented")
+    override val bindingVariable: Int
+        get() = TODO("Not yet implemented")
 
     lateinit var mContext: Context
     lateinit var mMusicData: MusicEntity
@@ -57,7 +65,7 @@ class MainMusicActivity : BaseActivity<ActivityMainBinding>({ ActivityMainBindin
             }
         })
 
-        mViewBiding.musicSeekbar.setOnSeekBarChangeListener(object :
+        binding.musicSeekbar.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(
                 seekBar: SeekBar?,
@@ -80,7 +88,7 @@ class MainMusicActivity : BaseActivity<ActivityMainBinding>({ ActivityMainBindin
             }
         })
 
-        mViewBiding.musicPlayPauseBtn.setOnClickListener(this)
+        binding.musicPlayPauseBtn.setOnClickListener(this)
     }
 
     /**
@@ -88,24 +96,24 @@ class MainMusicActivity : BaseActivity<ActivityMainBinding>({ ActivityMainBindin
      */
     fun setData() {
         mMusicData.title.let {
-            mViewBiding.musicTitle.text = it
+            binding.musicTitle.text = it
         }
         mMusicData.singer.let {
-            mViewBiding.musicSinger.text = it
+            binding.musicSinger.text = it
         }
         mMusicData.album.let {
-            mViewBiding.musicAlbum.text = it
+            binding.musicAlbum.text = it
         }
         mMusicData.image.let {
-            Glide.with(this).load(it).into(mViewBiding.musicAlbumImage)
+            Glide.with(this).load(it).into(binding.musicAlbumImage)
         }
         mMusicData.file.let {
             mMusicFile = Uri.parse(it)
             mMusicPlayer = MediaPlayer.create(mContext, mMusicFile)
-            mViewBiding.musicSeekbar.max = mMusicPlayer.duration
+            binding. musicSeekbar.max = mMusicPlayer.duration
             mTotalTime = mMusicPlayer.duration.toLong()
-            mViewBiding.musicTotalTime.text = milliSecondsToTimer(mTotalTime)
-            mViewBiding.musicTotalTime.isVisible = true
+            binding.musicTotalTime.text = milliSecondsToTimer(mTotalTime)
+            binding.musicTotalTime.isVisible = true
 
             mMusicPlayer.setOnCompletionListener(object : MediaPlayer.OnCompletionListener {
                 override fun onCompletion(p0: MediaPlayer?) {
@@ -114,7 +122,7 @@ class MainMusicActivity : BaseActivity<ActivityMainBinding>({ ActivityMainBindin
                         prepare()
                         seekTo(0)
                     }
-                    mViewBiding.musicPlayPauseBtn.isSelected = false
+                    binding.musicPlayPauseBtn.isSelected = false
                 }
             })
         }
@@ -139,20 +147,20 @@ class MainMusicActivity : BaseActivity<ActivityMainBinding>({ ActivityMainBindin
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            mViewBiding.musicPlayPauseBtn.id -> {
-                if (mViewBiding.musicPlayPauseBtn.isSelected) {
+            binding.musicPlayPauseBtn.id -> {
+                if (musicPlayPauseBtn.isSelected) {
                     mMusicPlayer.apply {
                         stop()
                         prepare()
                         seekTo(mProgressDuration)
                     }
-                    mViewBiding.musicPlayPauseBtn.isSelected = false
+                    binding.musicPlayPauseBtn.isSelected = false
                 } else {
                     mMusicPlayer.let {
                         mMusicPlayer.start()
                         MusicThread().start()
 
-                        mViewBiding.musicPlayPauseBtn.isSelected = true
+                        binding.musicPlayPauseBtn.isSelected = true
                     }
                 }
             }
@@ -173,9 +181,9 @@ class MainMusicActivity : BaseActivity<ActivityMainBinding>({ ActivityMainBindin
                 // 현재 재생중인 위치를 가져와 SeekBar에 적용
                 runOnUiThread {
                     mCurrentTime = mMusicPlayer.currentPosition.toLong()
-                    mViewBiding.musicLeftTime.text = milliSecondsToTimer(mCurrentTime)
+                    binding.musicLeftTime.text = milliSecondsToTimer(mCurrentTime)
 
-                    mViewBiding.musicSeekbar.setProgress(mMusicPlayer.getCurrentPosition())
+                    binding.musicSeekbar.setProgress(mMusicPlayer.getCurrentPosition())
                 }
             }
         }

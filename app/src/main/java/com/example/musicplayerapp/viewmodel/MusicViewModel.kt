@@ -1,9 +1,6 @@
 package com.example.musicplayerapp.viewmodel
 
 import androidx.lifecycle.*
-import com.example.musicplayerapp.data.LyricsEntity
-import com.example.musicplayerapp.data.LyricsRepository
-import kotlinx.coroutines.launch
 
 class MusicViewModel() : ViewModel() {
     // TODO viewModel에서 데이터 업데이트 되도록 구현 필요

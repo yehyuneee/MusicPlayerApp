@@ -3,19 +3,29 @@ package com.example.musicplayerapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
 
-abstract class BaseActivity<T : ViewBinding>(val bindingFactory: (LayoutInflater) -> T) :
-    AppCompatActivity() {
+abstract class BaseActivity<Binding : ViewDataBinding, VM : ViewModel> :
+    AppCompatActivity(), LifecycleObserver {
 
-    private lateinit var mInitViewBiding: T
-    val mViewBiding: T get() = requireNotNull(mInitViewBiding)
-    // requireNotNull을 통해 nullable이 제거된 바인딩을 사용하게 만듬
+    private var _binding: Binding? = null
+    val binding get() = _binding!!
+
+    abstract val layoutId: Int
+    abstract val viewModel: VM
+    abstract val bindingVariable: Int
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mInitViewBiding = bindingFactory(layoutInflater)
-        setContentView(mViewBiding.root)
+        DataBindingUtil.setContentView<Binding>(this, layoutId).apply {
+            lifecycleOwner = this@BaseActivity
+            setVariable(bindingVariable, viewModel)
+            _binding = this
+        }
     }
 }

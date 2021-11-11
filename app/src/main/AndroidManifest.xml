@@ -20,18 +20,27 @@
             android:exported="true" />
         <activity
             android:name=".LyricsActivity"
-            android:launchMode="singleTask"
-            android:exported="true" />
+            android:exported="true"
+            android:launchMode="singleTask" />
         <activity
             android:name=".SplashActivity"
             android:exported="true"
             android:launchMode="singleTask"
-            android:theme="@style/SplashTheme">
-        </activity>
+            android:theme="@style/SplashTheme"/>
         <activity
             android:name=".MainMusicActivity"
-            android:launchMode="singleTask"
-            android:exported="true" >
+            android:exported="true"
+            android:launchMode="singleTask">
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
+
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".RxMainMusicActivity"
+            android:exported="true"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

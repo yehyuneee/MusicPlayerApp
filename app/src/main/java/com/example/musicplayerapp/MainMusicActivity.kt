@@ -10,21 +10,18 @@ import android.util.Log
 import android.view.View
 import android.widget.SeekBar
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModel
 import com.bumptech.glide.Glide
 import com.example.musicplayerapp.data.LyricsEntity
 import com.example.musicplayerapp.data.MusicEntity
 import com.example.musicplayerapp.data.RequestMusicData
 import com.example.musicplayerapp.databinding.ActivityMainBinding
-import com.example.musicplayerapp.databinding.ActivityMainBindingImpl
 import com.example.musicplayerapp.listener.ResponseResultListener
 import com.example.musicplayerapp.viewmodel.MusicViewModel
 import java.lang.Exception
 import java.util.regex.Pattern
 
-class MainMusicActivity : BaseActivity<ActivityMainBindingImpl, MusicViewModel>(),
+class MainMusicActivity : BaseActivity<ActivityMainBinding, MusicViewModel>(),
     View.OnClickListener {
     override val layoutId = R.layout.activity_main
     override val viewModel: MusicViewModel
@@ -138,7 +135,7 @@ class MainMusicActivity : BaseActivity<ActivityMainBindingImpl, MusicViewModel>(
                 while (matcher.find()) {
                     duration = matcher.group(1)
                 }
-                var lyricsEntity: LyricsEntity = LyricsEntity(1, duration, lyrics)
+                var lyricsEntity: LyricsEntity = LyricsEntity(duration, lyrics)
                 // TODO test primary key인 id값 확인해야함!!!!
 
             }

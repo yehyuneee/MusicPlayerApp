@@ -7,7 +7,6 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "lyricsList")
 data class LyricsEntity(
     @PrimaryKey(autoGenerate = true)
-    var id: Int,
 
     @ColumnInfo(name = "duration")
     var duration: String?,

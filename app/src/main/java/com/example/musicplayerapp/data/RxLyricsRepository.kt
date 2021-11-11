@@ -15,7 +15,7 @@ import java.util.concurrent.Flow
  * Model에서 데이터를 요청가서 가져온다 (RestApi형태)
  * 가져온 데이터 viewModel로 전달
  */
-class RxLyricsRepository(application: Application) {
+class RxLyricsRepository() {
     private val api = RxMusicAPI.create()
     private var musicData: MutableLiveData<MusicEntity> = MutableLiveData()
 

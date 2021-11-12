@@ -16,4 +16,4 @@
 3. Seekbar
 4. Play/Stop 버튼
           
-<b>*** 현재 메인 화면 UI 세부 기능 구현 중</b>
+<b>*** 현재 Rxjava 활용한 MVVM구조로 리팩토링 중

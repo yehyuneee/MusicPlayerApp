@@ -12,7 +12,7 @@ import android.widget.SeekBar
 import android.widget.Toast
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
-import com.example.musicplayerapp.data.LyricsEntity
+import com.example.musicplayerapp.data.model.LyricsEntity
 import com.example.musicplayerapp.data.MusicEntity
 import com.example.musicplayerapp.data.RequestMusicData
 import com.example.musicplayerapp.databinding.ActivityMainBinding
@@ -107,7 +107,7 @@ class MainMusicActivity : BaseActivity<ActivityMainBinding, MusicViewModel>(),
         mMusicData.file.let {
             mMusicFile = Uri.parse(it)
             mMusicPlayer = MediaPlayer.create(mContext, mMusicFile)
-            binding. musicSeekbar.max = mMusicPlayer.duration
+            binding.musicSeekbar.max = mMusicPlayer.duration
             mTotalTime = mMusicPlayer.duration.toLong()
             binding.musicTotalTime.text = milliSecondsToTimer(mTotalTime)
             binding.musicTotalTime.isVisible = true
@@ -164,6 +164,7 @@ class MainMusicActivity : BaseActivity<ActivityMainBinding, MusicViewModel>(),
         }
     }
 
+    // TODO Thread 구현부터 필요
     /**
      * 음악 재생에 따른 SeekBar 설정
      */
@@ -180,7 +181,7 @@ class MainMusicActivity : BaseActivity<ActivityMainBinding, MusicViewModel>(),
                     mCurrentTime = mMusicPlayer.currentPosition.toLong()
                     binding.musicLeftTime.text = milliSecondsToTimer(mCurrentTime)
 
-                    binding.musicSeekbar.setProgress(mMusicPlayer.getCurrentPosition())
+                    binding.musicSeekbar.setProgress(mCurrentTime.toInt())
                 }
             }
         }
